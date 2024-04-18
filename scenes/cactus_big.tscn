@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://dtkhbahyg2768"]
+
+[ext_resource type="Texture2D" uid="uid://bkehh4llc4obh" path="res://assets/sprites/cactus-1.png" id="1_365qu"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_duotv"]
+radius = 21.0238
+
+[node name="BigCactus" type="StaticBody2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(-1, -64)
+scale = Vector2(5, 5)
+texture = ExtResource("1_365qu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, -2)
+shape = SubResource("CircleShape2D_duotv")

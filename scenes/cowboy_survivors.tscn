@@ -1,0 +1,118 @@
+[gd_scene load_steps=5 format=3 uid="uid://bl3rvn54btrgh"]
+
+[ext_resource type="PackedScene" uid="uid://be00xo37bqmst" path="res://scenes/cowboy.tscn" id="1_g2ubp"]
+[ext_resource type="Script" path="res://scripts/cowboy_survivors.gd" id="1_w6sr2"]
+[ext_resource type="Texture2D" uid="uid://6jb7b0ctapdj" path="res://assets/sprites/sand.png" id="2_00gq0"]
+
+[sub_resource type="Curve2D" id="Curve2D_eu02t"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -50, -50, 0, 0, 0, 0, 1200, -50, 0, 0, 0, 0, 1200, 700, 0, 0, 0, 0, -50, 700, 0, 0, 0, 0, -50, -50)
+}
+point_count = 5
+
+[node name="Game" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_w6sr2")
+
+[node name="BackgroundLayer" type="CanvasLayer" parent="."]
+layer = -128
+
+[node name="Background" type="Sprite2D" parent="BackgroundLayer"]
+texture_filter = 1
+texture_repeat = 2
+scale = Vector2(5, 5)
+texture = ExtResource("2_00gq0")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 240, 140)
+
+[node name="Cowboy" parent="." instance=ExtResource("1_g2ubp")]
+position = Vector2(578, 325)
+
+[node name="Path2D" type="Path2D" parent="Cowboy"]
+position = Vector2(-578, -325)
+curve = SubResource("Curve2D_eu02t")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Cowboy/Path2D"]
+position = Vector2(-50, -50)
+
+[node name="BlobSpawnTimer" type="Timer" parent="."]
+wait_time = 0.3
+autostart = true
+
+[node name="MapGenerateTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="GameOver" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="GameOver"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.376471)
+
+[node name="Label" type="Label" parent="GameOver/ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -43.5
+offset_top = -11.5
+offset_right = 43.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 64
+text = "Game Over"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="GameOver/ColorRect"]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -89.0
+offset_top = 86.0
+offset_right = 89.0
+offset_bottom = 139.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "Start"
+
+[node name="Score" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="Score"]
+offset_left = 13.0
+offset_top = 11.0
+offset_right = 270.0
+offset_bottom = 68.0
+color = Color(0, 0, 0, 0.490196)
+
+[node name="Label" type="Label" parent="Score/ColorRect"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -21.0
+offset_right = 90.0
+offset_bottom = 21.0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 30
+text = "Score: 0"
+
+[connection signal="enemy_hit" from="Cowboy" to="." method="_on_cowboy_enemy_hit"]
+[connection signal="health_depleted" from="Cowboy" to="." method="_on_cowboy_health_depleted"]
+[connection signal="timeout" from="BlobSpawnTimer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="MapGenerateTimer" to="." method="_on_map_generate_timer_timeout"]
+[connection signal="pressed" from="GameOver/ColorRect/Button" to="." method="_on_button_pressed"]

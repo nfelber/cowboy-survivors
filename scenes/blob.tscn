@@ -1,0 +1,80 @@
+[gd_scene load_steps=11 format=3 uid="uid://drjhdht376xxy"]
+
+[ext_resource type="Script" path="res://scripts/blob.gd" id="1_kycgd"]
+[ext_resource type="Texture2D" uid="uid://du2flmxxpyyn6" path="res://assets/sprites/blob.png" id="1_p4uwf"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ecaeg"]
+atlas = ExtResource("1_p4uwf")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bpmwv"]
+atlas = ExtResource("1_p4uwf")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_36txm"]
+atlas = ExtResource("1_p4uwf")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p4yw0"]
+atlas = ExtResource("1_p4uwf")
+region = Rect2(48, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kwnf5"]
+atlas = ExtResource("1_p4uwf")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gi1oi"]
+atlas = ExtResource("1_p4uwf")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_uji14"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ecaeg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bpmwv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_36txm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p4yw0")
+}],
+"loop": false,
+"name": &"explode",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kwnf5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gi1oi")
+}],
+"loop": true,
+"name": &"move",
+"speed": 2.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_n4lit"]
+radius = 34.0147
+
+[node name="Blob" type="CharacterBody2D"]
+collision_layer = 3
+platform_floor_layers = 4294967040
+script = ExtResource("1_kycgd")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -25)
+scale = Vector2(5, 5)
+sprite_frames = SubResource("SpriteFrames_uji14")
+animation = &"move"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -14)
+shape = SubResource("CircleShape2D_n4lit")
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
